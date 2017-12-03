@@ -85,7 +85,7 @@ while True:
         gamestate = "GAMEOVER"
 
     if gamestate == "START":
-        game_name = "GAME NAME HERE"
+        game_name = "ASTEROID AVERSION"
 
         random.seed(pygame.time.get_ticks())
         if random.randint(0, 100) > 90:
