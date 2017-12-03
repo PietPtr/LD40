@@ -87,7 +87,6 @@ while True:
     if gamestate == "START":
         game_name = "ASTEROID AVERSION"
 
-        random.seed(pygame.time.get_ticks())
         if random.randint(0, 100) > 90:
             game_name_list = list(game_name)
             game_name_list[random.randint(0, len(game_name) - 1)] = random.choice(list("%_$?"))

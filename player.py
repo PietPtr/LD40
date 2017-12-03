@@ -2,6 +2,7 @@ import pygame
 import utils
 import math
 from asteroid import Asteroid
+import random
 
 class Player(object):
     def __init__(self, screensize):
@@ -11,14 +12,6 @@ class Player(object):
         self.level = 0
         self.screensize = screensize
         self.color = (0, 150, 0)
-        # self.goal = [utils.randint_seeded(self.level, 0, screensize[0]),
-        #              utils.randint_seeded(self.level, 0, screensize[1])]
-        #
-        # self.asteroids = []
-        # for i in range(0, self.level + 5):
-        #     apos = [utils.randint_seeded(self.level + 2 + i * 10, 0, screensize[0]),
-        #             utils.randint_seeded(self.level + 1 + i * 11, 0, screensize[1])]
-        #     self.asteroids.append(Asteroid(apos))
         self.goal = [0, 0]
         self.goalsize = 30
         self.asteroids = []
@@ -30,11 +23,14 @@ class Player(object):
         if self.size < 1:
             self.size = 1
 
-        self.velocity[0] /= 1.01
-        self.velocity[1] /= 1.01
+        self.velocity[0] /= 1.05
+        self.velocity[1] /= 1.05
 
         self.pos[0] += self.velocity[0] * dt
         self.pos[1] += self.velocity[1] * dt
+
+        for a in self.asteroids:
+            a.update(dt, self)
 
     def update(self, dt):
         if self.levelling < 0:
@@ -88,17 +84,18 @@ class Player(object):
             self.generate_new_level()
 
     def generate_new_level(self):
+        random.seed(pygame.time.get_ticks())
         self.asteroids = []
         for i in range(0, self.level + 2):
-            apos = [utils.randint_seeded(self.level + 2 + i * 10, 0, self.screensize[0]),
-                    utils.randint_seeded(self.level + 1 + i * 11, 0, self.screensize[1])]
+            apos = [random.randint(0, self.screensize[0]),
+                    random.randint(0, self.screensize[1])]
             self.asteroids.append(Asteroid(apos))
 
-        self.goal = [utils.randint_seeded(self.level + 4, self.screensize[0] / 2, self.screensize[0] - 50),
-                     utils.randint_seeded(self.level + 3, 50, self.screensize[1] - 50)]
+        self.goal = [random.randint(self.screensize[0] / 2, self.screensize[0] - 50),
+                     random.randint(50, self.screensize[1] - 50)]
 
-        self.pos = [utils.randint_seeded(self.level + 5, 0, self.screensize[0] / 3), \
-                    utils.randint_seeded(self.level + 6, 50, self.screensize[1] - 50)]
+        self.pos = [random.randint(0, int(self.screensize[0] / 3)), \
+                    random.randint(50, self.screensize[1] - 50)]
 
     def draw(self, screen, view, font):
         elapse_since_level = (pygame.time.get_ticks() - self.levelling)
@@ -137,5 +134,3 @@ class Player(object):
 
         leveltext = font.render("level " + str(self.level), 0, (20, 240, 10))
         screen.blit(leveltext, (10, 10))
-
-        
