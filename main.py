@@ -45,11 +45,6 @@ while True:
     """
     dt = clock.tick() / 1000.0
 
-    mov = pygame.mouse.get_rel()
-    if (pygame.mouse.get_pressed()[0]):
-        view[0] += mov[0] * 1 / zoom
-        view[1] += mov[1] * 1 / zoom
-
     if gamestate == "PLAYING":
         player.update(dt)
 

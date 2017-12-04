@@ -17,6 +17,7 @@ class Player(object):
         self.asteroids = []
         self.levelling = -1
         self.levelup()
+        self.generated = True
 
     def update_gameover(self, dt):
         self.size -= 1 * dt
@@ -67,8 +68,9 @@ class Player(object):
         if goaldist < 30 + self.size and self.levelling <= 0:
             self.levelup()
 
-        if (pygame.time.get_ticks() - self.levelling) > 1400 and self.levelling > 0:
+        if (pygame.time.get_ticks() - self.levelling) > 1400 and self.levelling > 0 and not self.generated:
             self.generate_new_level()
+            self.generated = True
 
         if (pygame.time.get_ticks() - self.levelling) > 1800 and self.levelling > 0:
             self.levelling = -1
@@ -76,6 +78,7 @@ class Player(object):
 
     def levelup(self):
         self.level += 1
+        self.generated = False
 
         if self.level != 1:
             self.levelling = pygame.time.get_ticks()
